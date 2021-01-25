@@ -62,3 +62,7 @@ $ oc project logging
 # Run the ELK setup script to install the stack. 
 $ ./elk_cleanup.sh
 ```
+
+## Reference
+
+- https://github.com/cmcornejocrespo/elastic-stack-helm-openshift
