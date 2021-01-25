@@ -18,11 +18,8 @@ filebeatConfig:
           - logs_path:
               logs_path: "/var/log/containers/"
       - drop_event.when.not.or:
-          - equals.kubernetes.namespace: "fhb-fis-sandbox"
-          - equals.kubernetes.namespace: "fhb-fis-dev"
-          - equals.kubernetes.namespace: "fhb-fis-uat"
-          - equals.kubernetes.namespace: "fhb-fis-prodr"
-          - equals.kubernetes.namespace: "fhb-fis-broker"
+          - equals.kubernetes.namespace: "my-app-1"
+          - equals.kubernetes.namespace: "my-app-2"
 
     monitoring:
       enabled: true

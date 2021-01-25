@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Switch to the logging namespace"
+oc project logging
 echo "Add the helm repo"
 helm repo add elastic https://helm.elastic.co
 echo "Install Elastic Search"
