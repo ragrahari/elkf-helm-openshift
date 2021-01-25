@@ -1,0 +1,43 @@
+---
+
+podSecurityContext:
+  fsGroup: null
+  runAsUser: null
+
+securityContext:
+   runAsUser: null
+
+service:
+  annotations: {}
+  type: ClusterIP
+  ports:
+    - name: beats
+      port: 5044
+      protocol: TCP
+      targetPort: 5044
+
+logstashConfig:
+  logstash.yml: |
+
+    http.host: "0.0.0.0"
+        
+    monitoring:
+      enabled: true
+      elasticsearch.hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+
+logstashPipeline:
+ logstash.conf: |
+   
+   input {
+      beats {
+        port => 5044
+      }
+    }
+    
+    output {
+      elasticsearch {
+        hosts => ["${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}"]
+        index => "%{[@metadata][beat]}-%{[@metadata][version]}" 
+      }
+    }
+          

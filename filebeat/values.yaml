@@ -1,0 +1,33 @@
+---
+podSecurityContext:
+  runAsUser: 0
+  privileged: true
+
+# Allows you to add any config files in /usr/share/filebeat
+# such as filebeat.yml
+filebeatConfig:
+  filebeat.yml: |
+    filebeat.inputs:
+    - type: container
+      paths:
+        - /var/log/containers/*.log
+      processors:
+      - add_kubernetes_metadata:
+          host: ${NODE_NAME}
+          matchers:
+          - logs_path:
+              logs_path: "/var/log/containers/"
+      - drop_event.when.not.or:
+          - equals.kubernetes.namespace: "fhb-fis-sandbox"
+          - equals.kubernetes.namespace: "fhb-fis-dev"
+          - equals.kubernetes.namespace: "fhb-fis-uat"
+          - equals.kubernetes.namespace: "fhb-fis-prodr"
+          - equals.kubernetes.namespace: "fhb-fis-broker"
+
+    monitoring:
+      enabled: true
+      elasticsearch:
+        hosts: ["${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}"]
+
+    output.logstash:
+      hosts: 'logstash-logstash:5044'
